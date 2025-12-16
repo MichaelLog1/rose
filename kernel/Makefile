@@ -50,11 +50,11 @@ $(ARCH_DIR)/crtn.o \
 .PHONY: all clean install install-headers install-kernel
 .SUFFIXES: .o .c .S
 
-all: myos.kernel
+all: rose.kernel
 
-myos.kernel: $(OBJS) $(ARCH_DIR)/linker.ld
+rose.kernel: $(OBJS) $(ARCH_DIR)/linker.ld
 	$(CC) -T $(ARCH_DIR)/linker.ld -o $@ $(CFLAGS) $(LINK_LIST)
-	grub-file --is-x86-multiboot myos.kernel
+	grub-file --is-x86-multiboot rose.kernel
 
 $(ARCH_DIR)/crtbegin.o $(ARCH_DIR)/crtend.o:
 	OBJ=`$(CC) $(CFLAGS) $(LDFLAGS) -print-file-name=$(@F)` && cp "$$OBJ" $@
@@ -66,7 +66,7 @@ $(ARCH_DIR)/crtbegin.o $(ARCH_DIR)/crtend.o:
 	$(CC) -MD -c $< -o $@ $(CFLAGS) $(CPPFLAGS)
 
 clean:
-	rm -f myos.kernel
+	rm -f rose.kernel
 	rm -f $(OBJS) *.o */*.o */*/*.o
 	rm -f $(OBJS:.o=.d) *.d */*.d */*/*.d
 
@@ -76,8 +76,8 @@ install-headers:
 	mkdir -p $(DEST_DIR)$(INCLUDE_DIR)
 	cp -R --preserve=timestamps include/. $(DEST_DIR)$(INCLUDE_DIR)/.
 
-install-kernel: myos.kernel
+install-kernel: rose.kernel
 	mkdir -p $(DEST_DIR)$(BOOT_DIR)
-	cp myos.kernel $(DEST_DIR)$(BOOT_DIR)
+	cp rose.kernel $(DEST_DIR)$(BOOT_DIR)
 
 -include $(OBJS:.o=.d)
